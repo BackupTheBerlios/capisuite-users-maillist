@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/capisuite-users/2013-November/index.html" >
+   <LINK REL="made" HREF="mailto:capisuite-users%40lists.berlios.de?Subject=Re%3A%20%5BCapisuite-users%5D%0A%20%3D%3Futf-8%3Fq%3FFaxempfang%3D3A_PDF_Anh%3DC3%3DA4nge__werde%3F%3D%0A%20%3D%3Futf-8%3Fq%3Fn_nicht_mehr_korrekt_erzeugt_%3D28capisuite_0%3D2E4%3D2E5-12%3D29%3F%3D&In-Reply-To=%3C20131123001817.4a9f7fb3%40gmx.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000025.html">
+   <LINK REL="Next"  HREF="000027.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)</H1>
+    <B>Ingo Arndt</B> 
+    <A HREF="mailto:capisuite-users%40lists.berlios.de?Subject=Re%3A%20%5BCapisuite-users%5D%0A%20%3D%3Futf-8%3Fq%3FFaxempfang%3D3A_PDF_Anh%3DC3%3DA4nge__werde%3F%3D%0A%20%3D%3Futf-8%3Fq%3Fn_nicht_mehr_korrekt_erzeugt_%3D28capisuite_0%3D2E4%3D2E5-12%3D29%3F%3D&In-Reply-To=%3C20131123001817.4a9f7fb3%40gmx.de%3E"
+       TITLE="[Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)">scachi at gmx.de
+       </A><BR>
+    <I>Sat Nov 23 00:18:17 CET 2013</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000025.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+        <LI>Next message: <A HREF="000027.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#26">[ date ]</a>
+              <a href="thread.html#26">[ thread ]</a>
+              <a href="subject.html#26">[ subject ]</a>
+              <a href="author.html#26">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hallo Stefan,
+
+dann scheint das Problem bei Dir eine andere Ursache zu haben als es bei mir der Fall
+war. Capisuite scheint bei mir die Version 0.4.5 zu sein.
+
+Das beste w&#228;re wohl die Konvertierungskette mal so auf der Konsole durchzugehen wie sie
+eigentlich von capisuite durchgef&#252;hrt wird (cs_helpers.py) um zu sehen an welcher Ecke es
+wirklich hakt.
+
+Also sff zu tif:
+sfftobmp  -tif DieSffFaxDatei -o DieTifAusgabeDatei
+Dann pr&#252;fen ob bei dir die tif korrekt angezeigt wird.
+sfftobmp -v zeigt bei mir die Version 3.1.3
+
+tif zu pdf:
+tiff2pdf DieTifDatei -o DiePDFAusgabeDatei
+Dann pr&#252;fen ob die PDF Datei korrekt angezeigt wird.
+tiff2pdf ohne Argumente gibt mir die Version &quot;LIBTIFF, Version 3.9.5&quot;
+
+
+Achja, nach &#196;nderungen an den .py Skripten von Capisuite war es f&#252;r mich notwendig
+Capisuite neu zu starten damit auch die &#196;nderungen wirklich verwendet werden.
+Zus&#228;tzlich lag bei mir noch die cs_helpers.py Datei an 2 oder 3 verschiedenen Stellen im
+System herum so das ich diese erst einmal per symlinks auf eine Datei reduziert habe da
+ich nicht wusste welche denn jetzt die richtige w&#228;re.
+
+Viel Erfolg
+Ingo
+
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000025.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+	<LI>Next message: <A HREF="000027.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#26">[ date ]</a>
+              <a href="thread.html#26">[ thread ]</a>
+              <a href="subject.html#26">[ subject ]</a>
+              <a href="author.html#26">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/capisuite-users">More information about the Capisuite-users
+mailing list</a><br>
+</body></html>

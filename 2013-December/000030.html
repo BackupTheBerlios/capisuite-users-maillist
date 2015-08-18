@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12) [solved]
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/capisuite-users/2013-December/index.html" >
+   <LINK REL="made" HREF="mailto:capisuite-users%40lists.berlios.de?Subject=Re%3A%20%5BCapisuite-users%5D%0A%20%3D%3Fiso-8859-1%3Fq%3FFaxempfang%3D3A_PDF_Anh%3DE4nge__wer%3F%3D%0A%20%3D%3Fiso-8859-1%3Fq%3Fden_nicht_mehr_korrekt_erzeugt_%3D28capisuite_0%3D2E4%3D2E5-12%3F%3D%0A%20%3D%3Fiso-8859-1%3Fq%3F%3D29_%3D5Bsolved%3D5D%3F%3D&In-Reply-To=%3C52C2D221.9010802%40hegner-online.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12) [solved]</H1>
+    <B>Stefan U. Hegner</B> 
+    <A HREF="mailto:capisuite-users%40lists.berlios.de?Subject=Re%3A%20%5BCapisuite-users%5D%0A%20%3D%3Fiso-8859-1%3Fq%3FFaxempfang%3D3A_PDF_Anh%3DE4nge__wer%3F%3D%0A%20%3D%3Fiso-8859-1%3Fq%3Fden_nicht_mehr_korrekt_erzeugt_%3D28capisuite_0%3D2E4%3D2E5-12%3F%3D%0A%20%3D%3Fiso-8859-1%3Fq%3F%3D29_%3D5Bsolved%3D5D%3F%3D&In-Reply-To=%3C52C2D221.9010802%40hegner-online.de%3E"
+       TITLE="[Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12) [solved]">stefan at hegner-online.de
+       </A><BR>
+    <I>Tue Dec 31 15:18:09 CET 2013</I>
+    <P><UL>
+        
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#30">[ date ]</a>
+              <a href="thread.html#30">[ thread ]</a>
+              <a href="subject.html#30">[ subject ]</a>
+              <a href="author.html#30">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hallo zusammen,
+
+also ich habe noch mal viel 'rumgefrickelt und einiges getestet.
+
+Am 25.11.2013 12:44, schrieb Scachi:
+&gt;<i> Ich verwende &quot;Ubuntu 12.04.3 LTS&quot; mit dem modifizierten .deb Paket
+</I>&gt;<i> &quot;capisuite_0.4.5-12_i386.deb&quot; mit der ver&#228;nderten Abh&#228;ngigkeit von
+</I>&gt;<i> libpython2.6 auf libpython2.7 und symbolischer Links
+</I>&gt;<i> libpython2.7.so.1.0 -&gt; libpython2.6.so.1.0 in /usr/lib
+</I>&gt;<i> libpython2.7.so.1.0 -&gt; libpython2.6.so.1 in /usr/lib 
+</I>So weit so gut. Das habe ich dann mal auch entsprechend umgebaut. Wobei
+ich das amd64 Paket verwende.
+
+Hab hier <A HREF="http://www.thomasuhl.de/blog/2012/20121020.html">http://www.thomasuhl.de/blog/2012/20121020.html</A> eine Doku dazu
+gefunden und dann f&#252;r die Abh&#228;ngigkeiten libpython2.6 und python2.6 mit
+equivs mir grade 2 dummy .deb-Pakete gebaut.
+ 
+Aber so wie ich das sehe, war das gar nicht erforderlich (hatte nur den
+netten Nebeneffekt, dass ich python2.6 losgeworden bin).
+
+Hier meine wesentlichen Erkenntnisse:
+
+  * Mein alternatives Konvertier-Kommando via tif2pdf funzte wg. der
+    Syntax nicht (am Ende das letzte ' &quot; ' vergessen). War dann also zum
+    Schluss bei:
+
+       command=&quot;tiff2pdf -p A4 &quot;+escape(basename+&quot;tif&quot;)+&quot; &quot;
+
+    Danach bekam ich aber auch keine funktionierenden PDFs hin (aber
+    wenigstens wurden wieder Faxe angenommen). Den gemeldeten Fehler
+    &quot;ERROR occured while converting file: Error 256 occured ...&quot; konnte
+    ich nicht nachvollziehen, daher bin ich wieder auf den
+    urspr&#252;nglichen Weg von tiff2ps --&gt; ps2pdf eingeschwenkt.
+
+  * Dabei ist mir aufgefallen, das bei dem urspr&#252;nglichen Kommando
+
+       command=&quot;tiff2ps -h11 -H12 -L.5 -w8.5 -a &quot;+escape(basename+&quot;tif&quot;)+&quot; | ps2pdf -sPAPERSIZE=a4 - -&quot;
+
+    Wohl von aus dem &quot;-h11 -H12&quot; ein Problem herr&#252;hrt, welche bei den
+    installierten Versionen der &#252;brigen Programme dazu f&#252;hrt, dass sich
+    capisuite &quot;verschluckt&quot; und nur ein leeres .pdf ohne die
+    eingebettete Grafik erzeugt. Meldung, wenn ichs in der Shell mache:
+
+       -H: Max viewport height cannot exceed page height.
+
+    Das finde ich komisch, zumal es eigentlich so auch in der tiff2ps
+    Doku beschreiben ist:
+
+       If you have a long image, it may be split in several pages:
+
+              tiff2ps -h11 -w8.5 -H14 -L.5 foo.tif &gt; foo.ps
+
+       The page size is set to 8.5x11 by -w and -h options. We will  accept  a
+
+       small  amount  of  vertical  compression,  so  -H  set to 14. Any pages
+
+       between 11 and 14 inches will be fit onto one page.  Pages longer  than
+
+       14  inches  are  cut off at 11 and continued on the next page. The -L.5
+
+       option says to repeat a half inch on the next page  (to  improve  read-
+
+       ability).
+
+  * F&#252;r den Moment habe ich f&#252;r mich zufriedenstellende Ergebnisse mit
+    folgendem Befehl:
+
+       command=&quot;tiff2ps -a -e -2 &quot;+escape(basename+&quot;tif&quot;)+&quot; | ps2pdf -sPAPERSIZE=a4 - -&quot;
+
+... hoffe, dass das irgendwem anders auch so dienlich ist.
+
+In diesem Sinne allen einen guten Rutsch!
+
+Stefan.
+
+-- 
+Stefan U. Hegner
+         &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/capisuite-users">stefan at hegner-online.de</A>&gt;
+              * * *
+D-32584 L&#246;hne --- good ole Germany
+internet: <A HREF="http://www.hegner-web.de">http://www.hegner-web.de</A>
+              * * *
+GPG-Key | 048D 7F64 0BEB 73B1 2725 
+F-Print | C05E 4F77 9674 EF11 55FE
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/capisuite-users/attachments/20131231/edbed4c9/attachment.html">https://lists.berlios.de/pipermail/capisuite-users/attachments/20131231/edbed4c9/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 230 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/capisuite-users/attachments/20131231/edbed4c9/attachment.pgp">https://lists.berlios.de/pipermail/capisuite-users/attachments/20131231/edbed4c9/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#30">[ date ]</a>
+              <a href="thread.html#30">[ thread ]</a>
+              <a href="subject.html#30">[ subject ]</a>
+              <a href="author.html#30">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/capisuite-users">More information about the Capisuite-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/capisuite-users/2013-November/index.html" >
+   <LINK REL="made" HREF="mailto:capisuite-users%40lists.berlios.de?Subject=Re%3A%20%5BCapisuite-users%5D%20%3D%3Fiso-8859-15%3Fq%3FFaxempfang%3D3A_PDF_Anh%3DE4nge_wer%3F%3D%0A%20%3D%3Fiso-8859-15%3Fq%3Fden_nicht_mehr_korrekt_erzeugt_%3D28capisuite_0%3D2E4%3D2E5-12%3F%3D%0A%20%3D%3Fiso-8859-15%3Fq%3F%3D29%3F%3D&In-Reply-To=%3C5287D21D.7070300%40hegner-online.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000024.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)</H1>
+    <B>Stefan U. Hegner</B> 
+    <A HREF="mailto:capisuite-users%40lists.berlios.de?Subject=Re%3A%20%5BCapisuite-users%5D%20%3D%3Fiso-8859-15%3Fq%3FFaxempfang%3D3A_PDF_Anh%3DE4nge_wer%3F%3D%0A%20%3D%3Fiso-8859-15%3Fq%3Fden_nicht_mehr_korrekt_erzeugt_%3D28capisuite_0%3D2E4%3D2E5-12%3F%3D%0A%20%3D%3Fiso-8859-15%3Fq%3F%3D29%3F%3D&In-Reply-To=%3C5287D21D.7070300%40hegner-online.de%3E"
+       TITLE="[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)">stefan at hegner-online.de
+       </A><BR>
+    <I>Sat Nov 16 21:14:21 CET 2013</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000024.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#23">[ date ]</a>
+              <a href="thread.html#23">[ thread ]</a>
+              <a href="subject.html#23">[ subject ]</a>
+              <a href="author.html#23">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hallo zusammen,
+
+... hoffe das liest noch jemand - die Liste scheint ja recht tot ;-(.
+
+Ich habe neulich festgestellt, dass seit einiger Zeit mein Capisuite-Fax
+mir nur noch &quot;kaputte&quot; .pdfs mailt. Die abgespeicherten .sff Dateien
+sind lesbar.
+
+Anbei mal so ein &quot;kaputtes&quot; .pdf zur Ansicht.
+
+Der relevante Code m&#252;sste dieser Abschnitt aus der
+/usr/lib/pymodules/python2.7/cs_helpers.py sein:
+
+                if (mail_type==&quot;sff&quot;): # normal fax file
+                        # sff -&gt; tif
+                        ret=sfftotiff(attachment,basename+&quot;tif&quot;)
+                        if (ret or not os.access(basename+&quot;tif&quot;,os.F_OK)):
+                                raise ConvError(&quot;Can't convert sff to tif. sfftobmp not installed?&quot;)
+                        # tif -&gt; ps -&gt; pdf
+                        # the first pipe must be handled by the shell so that the output of
+                        # of ps2pdf can be read immediately. Handling this shell in Python
+                        # leads to an overflow of the ps2pdf output pipe...
+                        command=&quot;tiff2ps -h11 -H12 -L.5 -w8.5 -a &quot;+escape(basename+&quot;tif&quot;)+&quot; | ps2pdf -sPAPERSIZE=a4 - -&quot;
+                        tiff2pdf=popen2.Popen3(command)
+                        if (tiff2pdf.poll()!=-1):
+                                raise ConvError(&quot;Error while calling tiff2ps or ps2pdf. Not installed?&quot;)
+                        tiff2pdf.tochild.close() # we don't need the input pipe
+                        # create attachment with pdf stream
+                        filepart = email.MIMEBase.MIMEBase(&quot;application&quot;,&quot;pdf&quot;,name=os.path.basename(basename)+&quot;pdf&quot;)
+                        filepart.add_header('Content-Disposition','attachment',filename=os.path.basename(basename)+&quot;pdf&quot;)
+                        filepart.set_payload(tiff2pdf.fromchild.read())
+                        tiff2pdf.fromchild.close()
+                        ret=tiff2pdf.wait()
+                        if (ret!=0):
+                                raise ConvError(&quot;Error &quot;+str(ret)+&quot; occured during tiff2ps or ps2pdf&quot;)
+                        os.unlink(basename+&quot;tif&quot;)
+                        email.Encoders.encode_base64(filepart)
+
+Mir scheint, dass der &quot;Durchreich-Prozess&quot; von sfftobmp (mit -t f&#252;r
+.tiff) --&gt; tiff2ps --&gt; ps2pdf vermutlich wg. irgendeines Updates so
+nicht mehr funzt (Habe hier ein Debian wheezy zu laufen).
+
+Die Optionen f&#252;r tiff2ps (-h11 -H12 -L.5 -w8.5 -a) und f&#252;r ps2pdf
+(-sPAPERSIZE=a4 - ) erscheinen mir gem. Doku &quot;sauber&quot;.
+
+... Theoretisch m&#252;sste man mit &quot;tiff2pdf&quot; auch einen Schritt eliminieren
+k&#246;nnen ...
+
+Hat da jemand &#228;hnliche Beobachtungen oder gar L&#246;sungsvorschl&#228;ge im &#196;rmel?
+
+Danke
+
+Stefan.
+
+-- 
+Stefan U. Hegner 
+         &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/capisuite-users">stefan at hegner-online.de</A>&gt;
+              * * *
+D-32584 L&#246;hne --- good ole Germany
+internet: <A HREF="http://www.hegner-web.de">http://www.hegner-web.de</A>
+              * * *
+GPG-Key | D9DB 51BD 2DA6 9B3A 41CB
+F-Print | 0287 05A1 8D11 38BA CE91
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: fax-225.pdf
+Type: application/pdf
+Size: 2216 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/capisuite-users/attachments/20131116/39359075/attachment.pdf">https://lists.berlios.de/pipermail/capisuite-users/attachments/20131116/39359075/attachment.pdf</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/capisuite-users/attachments/20131116/39359075/attachment.pgp">https://lists.berlios.de/pipermail/capisuite-users/attachments/20131116/39359075/attachment.pgp</A>&gt;
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000024.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#23">[ date ]</a>
+              <a href="thread.html#23">[ thread ]</a>
+              <a href="subject.html#23">[ subject ]</a>
+              <a href="author.html#23">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/capisuite-users">More information about the Capisuite-users
+mailing list</a><br>
+</body></html>

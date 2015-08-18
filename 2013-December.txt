@@ -1,0 +1,109 @@
+From stefan at hegner-online.de  Tue Dec 31 15:18:09 2013
+From: stefan at hegner-online.de (Stefan U. Hegner)
+Date: Tue, 31 Dec 2013 15:18:09 +0100
+Subject: [Capisuite-users]
+ =?iso-8859-1?q?Faxempfang=3A_PDF_Anh=E4nge__wer?=
+ =?iso-8859-1?q?den_nicht_mehr_korrekt_erzeugt_=28capisuite_0=2E4=2E5-12?=
+ =?iso-8859-1?q?=29_=5Bsolved=5D?=
+In-Reply-To: <52933E5F.8070700@goebel-consult.de>
+References: <20131122161837.39df1b7f@gmx.de>	<528FCD24.4000109@hegner-online.de>	<20131123001817.4a9f7fb3@gmx.de>
+	<52923F4A.4060001@hegner-online.de>
+	<52933E5F.8070700@goebel-consult.de>
+Message-ID: <52C2D221.9010802@hegner-online.de>
+
+Hallo zusammen,
+
+also ich habe noch mal viel 'rumgefrickelt und einiges getestet.
+
+Am 25.11.2013 12:44, schrieb Scachi:
+> Ich verwende "Ubuntu 12.04.3 LTS" mit dem modifizierten .deb Paket
+> "capisuite_0.4.5-12_i386.deb" mit der ver?nderten Abh?ngigkeit von
+> libpython2.6 auf libpython2.7 und symbolischer Links
+> libpython2.7.so.1.0 -> libpython2.6.so.1.0 in /usr/lib
+> libpython2.7.so.1.0 -> libpython2.6.so.1 in /usr/lib 
+So weit so gut. Das habe ich dann mal auch entsprechend umgebaut. Wobei
+ich das amd64 Paket verwende.
+
+Hab hier http://www.thomasuhl.de/blog/2012/20121020.html eine Doku dazu
+gefunden und dann f?r die Abh?ngigkeiten libpython2.6 und python2.6 mit
+equivs mir grade 2 dummy .deb-Pakete gebaut.
+ 
+Aber so wie ich das sehe, war das gar nicht erforderlich (hatte nur den
+netten Nebeneffekt, dass ich python2.6 losgeworden bin).
+
+Hier meine wesentlichen Erkenntnisse:
+
+  * Mein alternatives Konvertier-Kommando via tif2pdf funzte wg. der
+    Syntax nicht (am Ende das letzte ' " ' vergessen). War dann also zum
+    Schluss bei:
+
+       command="tiff2pdf -p A4 "+escape(basename+"tif")+" "
+
+    Danach bekam ich aber auch keine funktionierenden PDFs hin (aber
+    wenigstens wurden wieder Faxe angenommen). Den gemeldeten Fehler
+    "ERROR occured while converting file: Error 256 occured ..." konnte
+    ich nicht nachvollziehen, daher bin ich wieder auf den
+    urspr?nglichen Weg von tiff2ps --> ps2pdf eingeschwenkt.
+
+  * Dabei ist mir aufgefallen, das bei dem urspr?nglichen Kommando
+
+       command="tiff2ps -h11 -H12 -L.5 -w8.5 -a "+escape(basename+"tif")+" | ps2pdf -sPAPERSIZE=a4 - -"
+
+    Wohl von aus dem "-h11 -H12" ein Problem herr?hrt, welche bei den
+    installierten Versionen der ?brigen Programme dazu f?hrt, dass sich
+    capisuite "verschluckt" und nur ein leeres .pdf ohne die
+    eingebettete Grafik erzeugt. Meldung, wenn ichs in der Shell mache:
+
+       -H: Max viewport height cannot exceed page height.
+
+    Das finde ich komisch, zumal es eigentlich so auch in der tiff2ps
+    Doku beschreiben ist:
+
+       If you have a long image, it may be split in several pages:
+
+              tiff2ps -h11 -w8.5 -H14 -L.5 foo.tif > foo.ps
+
+       The page size is set to 8.5x11 by -w and -h options. We will  accept  a
+
+       small  amount  of  vertical  compression,  so  -H  set to 14. Any pages
+
+       between 11 and 14 inches will be fit onto one page.  Pages longer  than
+
+       14  inches  are  cut off at 11 and continued on the next page. The -L.5
+
+       option says to repeat a half inch on the next page  (to  improve  read-
+
+       ability).
+
+  * F?r den Moment habe ich f?r mich zufriedenstellende Ergebnisse mit
+    folgendem Befehl:
+
+       command="tiff2ps -a -e -2 "+escape(basename+"tif")+" | ps2pdf -sPAPERSIZE=a4 - -"
+
+... hoffe, dass das irgendwem anders auch so dienlich ist.
+
+In diesem Sinne allen einen guten Rutsch!
+
+Stefan.
+
+-- 
+Stefan U. Hegner
+         <stefan at hegner-online.de>
+              * * *
+D-32584 L?hne --- good ole Germany
+internet: http://www.hegner-web.de
+              * * *
+GPG-Key | 048D 7F64 0BEB 73B1 2725 
+F-Print | C05E 4F77 9674 EF11 55FE
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/capisuite-users/attachments/20131231/edbed4c9/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 230 bytes
+Desc: OpenPGP digital signature
+URL: <https://lists.berlios.de/pipermail/capisuite-users/attachments/20131231/edbed4c9/attachment.pgp>
+

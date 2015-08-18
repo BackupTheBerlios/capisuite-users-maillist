@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/capisuite-users/2013-November/index.html" >
+   <LINK REL="made" HREF="mailto:capisuite-users%40lists.berlios.de?Subject=Re%3A%20%5BCapisuite-users%5D%0A%20%3D%3Fiso-8859-15%3Fq%3FFaxempfang%3D3A_PDF_Anh%3DE4nge__we%3F%3D%0A%20%3D%3Fiso-8859-15%3Fq%3Frden_nicht_mehr_korrekt_erzeugt_%3D28capisuite_0%3D2E4%3D2E5-12%3F%3D%0A%20%3D%3Fiso-8859-15%3Fq%3F%3D29%3F%3D&In-Reply-To=%3C52933800.1050207%40gmx.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000029.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)</H1>
+    <B>Scachi</B> 
+    <A HREF="mailto:capisuite-users%40lists.berlios.de?Subject=Re%3A%20%5BCapisuite-users%5D%0A%20%3D%3Fiso-8859-15%3Fq%3FFaxempfang%3D3A_PDF_Anh%3DE4nge__we%3F%3D%0A%20%3D%3Fiso-8859-15%3Fq%3Frden_nicht_mehr_korrekt_erzeugt_%3D28capisuite_0%3D2E4%3D2E5-12%3F%3D%0A%20%3D%3Fiso-8859-15%3Fq%3F%3D29%3F%3D&In-Reply-To=%3C52933800.1050207%40gmx.de%3E"
+       TITLE="[Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)">scachi at gmx.de
+       </A><BR>
+    <I>Mon Nov 25 12:44:00 CET 2013</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000029.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#28">[ date ]</a>
+              <a href="thread.html#28">[ thread ]</a>
+              <a href="subject.html#28">[ subject ]</a>
+              <a href="author.html#28">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hallo Stefan,
+
+mein Patch wird dir nichts bringen da mein Problem ein ganz anderes war, 
+verwende ihn am besten erst gar nicht wenn Du nicht das folgende Problem 
+hast:
+Die Ausgabe des tif2pdf auf stdout mit Umleitung in Datei &quot;&gt;&quot; erzeugte 
+die erste Zeile in der PDF Datei im Format von:
+&quot;II*^@^@^@^@%PDF-1.1 &quot;
+Jedoch die Ausgabe des tif2pdf mit Ausgabe in Datei &quot;-o&quot; erzeugte die 
+erste Zeile in der PDF Datei im Format von:
+&quot;%PDF-1.1 &quot;
+Mein sed Befehl entfernt also bei mir die Zeichen vor &quot;%PDF&quot;.
+Besser w&#228;re der sed Befehl so, da er dann nur in der ersten Zeile
+Anwendung findet:
+command=&quot;tiff2pdf -p A4 &quot;+tiffilename+&quot; | sed '1!b;s/II\*.*%PDF/%PDF/'&quot;
+Aber wie gesagt, verwende den Kram besser nicht da Du ein anderes 
+Problem zu haben scheinst.
+
+Was mir hier auch auff&#228;llt ist das bei mir hier &quot;%PDF-1.1&quot; in der ersten 
+Zeile steht, bei Dir jedoch &quot;%PDF-1.4&quot; - keine Ahnung wieso und ob das 
+entscheidend ist.
+
+Angeh&#228;ngt, sofern es die Liste denn erlaubt und nicht zerhackt, ist ein 
+kleines Python Skript mit der ich die Konvertierung bei mir im System 
+untersucht und ver&#228;ndert hatte ohne Capisuite selbst lahmzulegen.
+Anpassen m&#252;sstest Du bestimmt die &quot;filebasename&quot; Variable auf Deine 
+entsprechende fax.sff Datei. Dann ausf&#252;hren mit &quot;python test.py&quot;
+Vielleicht ist es Dir ja eine Hilfe.
+
+Bei mir funktioniert &#252;brigens die Konvertierung sowohl mit als auch ohne 
+&quot; -p A4 &quot; bei tiff2pdf.
+
+Ich verwende &quot;Ubuntu 12.04.3 LTS&quot; mit dem modifizierten .deb Paket
+&quot;capisuite_0.4.5-12_i386.deb&quot; mit der ver&#228;nderten Abh&#228;ngigkeit von 
+libpython2.6 auf libpython2.7 und symbolischer Links
+libpython2.7.so.1.0 -&gt; libpython2.6.so.1.0 in /usr/lib
+libpython2.7.so.1.0 -&gt; libpython2.6.so.1 in /usr/lib
+
+Tut mir Leid, aber mehr kann ich vermutlich nicht f&#252;r Dich tun, ich war 
+schon heilfroh die Anh&#228;nge bei mir korrigieren zu k&#246;nnen per basteln 
+ohne python Kenntisse ;-)
+
+Beste Gr&#252;&#223;e
+Ingo
+-------------- next part --------------
+
+import os,re,time,pwd,fcntl,popen2
+
+def sfftotiff(fromfile,tofile):
+	parameters=(&quot;-tif&quot;,fromfile,&quot;-o&quot;,tofile)	
+	return os.spawnlp(os.P_WAIT,&quot;sfftobmp&quot;,&quot;sfftobmp&quot;,*parameters)
+
+# @return the escaped filename
+def escape(filename):
+	return &quot;'&quot;+filename.replace(&quot;'&quot;,&quot;'\\''&quot;)+&quot;'&quot;
+
+class ConvError(Exception): pass
+
+filebasename=&quot;/root/root-fax-26&quot;
+
+faxfilename=filebasename+&quot;.sff&quot;
+tiffilename=filebasename+&quot;.tif&quot;
+pdffilename=filebasename+&quot;.pdf&quot;
+pdffilenamesed=filebasename+&quot;_sed.pdf&quot;
+pdffilenamesed2=filebasename+&quot;_sed2.pdf&quot;
+
+ret=sfftotiff(faxfilename,tiffilename)
+
+command=&quot;tiff2pdf -p A4 &quot;+tiffilename
+commandsed=&quot;tiff2pdf -p A4 &quot;+tiffilename+&quot; | sed s/'^II*.*%PDF'/%PDF/&quot;
+commandsed2=&quot;tiff2pdf -p A4 &quot;+tiffilename+&quot; | sed '1!b;s/II\*.*%PDF/%PDF/'&quot;
+
+tiff2pdf=popen2.Popen3(command)
+if (tiff2pdf.poll()!=-1):
+    raise ConvError(&quot;Error c1&quot;)
+tiff2pdf.tochild.close() # we don't need the input pipe
+pdf=tiff2pdf.fromchild.read()
+fpdf=open(pdffilename,'w')
+fpdf.write(pdf)
+fpdf.close()
+tiff2pdf.fromchild.close()
+ret=tiff2pdf.wait()
+
+
+tiff2pdf=popen2.Popen3(commandsed)
+if (tiff2pdf.poll()!=-1):
+    raise ConvError(&quot;Error c2&quot;)
+tiff2pdf.tochild.close() # we don't need the input pipe
+pdf=tiff2pdf.fromchild.read()
+fpdf=open(pdffilenamesed,'w')
+fpdf.write(pdf)
+fpdf.close()
+tiff2pdf.fromchild.close()
+ret=tiff2pdf.wait()
+
+tiff2pdf=popen2.Popen3(commandsed2)
+if (tiff2pdf.poll()!=-1):
+    raise ConvError(&quot;Error c3&quot;)
+tiff2pdf.tochild.close() # we don't need the input pipe
+pdf=tiff2pdf.fromchild.read()
+fpdf=open(pdffilenamesed2,'w')
+fpdf.write(pdf)
+fpdf.close()
+tiff2pdf.fromchild.close()
+ret=tiff2pdf.wait()
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000029.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#28">[ date ]</a>
+              <a href="thread.html#28">[ thread ]</a>
+              <a href="subject.html#28">[ subject ]</a>
+              <a href="author.html#28">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/capisuite-users">More information about the Capisuite-users
+mailing list</a><br>
+</body></html>

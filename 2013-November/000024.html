@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/capisuite-users/2013-November/index.html" >
+   <LINK REL="made" HREF="mailto:capisuite-users%40lists.berlios.de?Subject=Re%3A%20%5BCapisuite-users%5D%0A%20%3D%3Fiso-8859-15%3Fq%3FFaxempfang%3D3A_PDF_Anh%3DE4nge_wer%3F%3D%0A%20%3D%3Fiso-8859-15%3Fq%3Fden_nicht_mehr_korrekt_erzeugt_%3D28capisuite_0%3D2E4%3D2E5-12%3F%3D%0A%20%3D%3Fiso-8859-15%3Fq%3F%3D29%3F%3D&In-Reply-To=%3C20131122161837.39df1b7f%40gmx.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000023.html">
+   <LINK REL="Next"  HREF="000025.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)</H1>
+    <B>Ingo Arndt</B> 
+    <A HREF="mailto:capisuite-users%40lists.berlios.de?Subject=Re%3A%20%5BCapisuite-users%5D%0A%20%3D%3Fiso-8859-15%3Fq%3FFaxempfang%3D3A_PDF_Anh%3DE4nge_wer%3F%3D%0A%20%3D%3Fiso-8859-15%3Fq%3Fden_nicht_mehr_korrekt_erzeugt_%3D28capisuite_0%3D2E4%3D2E5-12%3F%3D%0A%20%3D%3Fiso-8859-15%3Fq%3F%3D29%3F%3D&In-Reply-To=%3C20131122161837.39df1b7f%40gmx.de%3E"
+       TITLE="[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)">scachi at gmx.de
+       </A><BR>
+    <I>Fri Nov 22 16:18:37 CET 2013</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000023.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+        <LI>Next message: <A HREF="000025.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#24">[ date ]</a>
+              <a href="thread.html#24">[ thread ]</a>
+              <a href="subject.html#24">[ subject ]</a>
+              <a href="author.html#24">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hallo,
+
+sorry f&#252;r die sp&#228;te Antwort...
+Ich benutze direkt tiff2pdf .. der &#196;rger bleibt der gleiche.
+Die PDF Dateien lassen sich nicht mit AReader &#246;ffnen, jedoch kann 
+PDF-XChange Viewer sie &#246;ffnen.
+Eine n&#228;here Untersuchung ergab:
+Die direkte Ausgabe in eine Datei per -o Schalter funktioniert korrekt, 
+auf stdout jedoch gibt es ein paar Sonderzeichen zu Anfang der Ausgabe 
+die ich nicht zuordnen kann.
+Daher l&#246;sche ich diese w&#228;hrend des Aufrufes mit sed. Bei mir 
+funktioniert das nun bisher ohne Probleme.
+
+Alt:
+# command=&quot;tiff2ps -h11 -H12 -L.5 -w8.5 -a &quot;+escape(basename+&quot;tif&quot;)+&quot; | 
+ps2pdf -sPAPERSIZE=a4 - -&quot;
+
+Neu:
+command=&quot;tiff2pdf &quot;+escape(basename+&quot;tif&quot;)+&quot; | sed s/'II*.*%PDF'/%PDF/&quot;
+
+Beste Gr&#252;&#223;e
+Ingo
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000023.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+	<LI>Next message: <A HREF="000025.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#24">[ date ]</a>
+              <a href="thread.html#24">[ thread ]</a>
+              <a href="subject.html#24">[ subject ]</a>
+              <a href="author.html#24">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/capisuite-users">More information about the Capisuite-users
+mailing list</a><br>
+</body></html>

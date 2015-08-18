@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/capisuite-users/2013-November/index.html" >
+   <LINK REL="made" HREF="mailto:capisuite-users%40lists.berlios.de?Subject=Re%3A%20%5BCapisuite-users%5D%0A%20%3D%3Futf-8%3Fq%3FFaxempfang%3D3A_PDF_Anh%3DC3%3DA4nge_werden%3F%3D%0A%20%3D%3Futf-8%3Fq%3F_nicht_mehr_korrekt_erzeugt_%3D28capisuite_0%3D2E4%3D2E5-12%3D29%3F%3D&In-Reply-To=%3C528FCD24.4000109%40hegner-online.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000024.html">
+   <LINK REL="Next"  HREF="000026.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)</H1>
+    <B>Stefan U. Hegner</B> 
+    <A HREF="mailto:capisuite-users%40lists.berlios.de?Subject=Re%3A%20%5BCapisuite-users%5D%0A%20%3D%3Futf-8%3Fq%3FFaxempfang%3D3A_PDF_Anh%3DC3%3DA4nge_werden%3F%3D%0A%20%3D%3Futf-8%3Fq%3F_nicht_mehr_korrekt_erzeugt_%3D28capisuite_0%3D2E4%3D2E5-12%3D29%3F%3D&In-Reply-To=%3C528FCD24.4000109%40hegner-online.de%3E"
+       TITLE="[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)">stefan at hegner-online.de
+       </A><BR>
+    <I>Fri Nov 22 22:31:16 CET 2013</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000024.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+        <LI>Next message: <A HREF="000026.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#25">[ date ]</a>
+              <a href="thread.html#25">[ thread ]</a>
+              <a href="subject.html#25">[ subject ]</a>
+              <a href="author.html#25">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hallo Ingo,
+
+
+Am 22.11.2013 16:18, schrieb Ingo Arndt:
+&gt;<i> sorry f&#252;r die sp&#228;te Antwort...
+</I>... besser sp&#228;t als nie!
+&gt;<i> Ich benutze direkt tiff2pdf .. der &#196;rger bleibt der gleiche.
+</I>&gt;<i> Die PDF Dateien lassen sich nicht mit AReader &#246;ffnen, jedoch kann 
+</I>&gt;<i> PDF-XChange Viewer sie &#246;ffnen.
+</I>Hmmm, ... OK ...
+&gt;<i> Eine n&#228;here Untersuchung ergab:
+</I>&gt;<i> Die direkte Ausgabe in eine Datei per -o Schalter funktioniert korrekt, 
+</I>&gt;<i> auf stdout jedoch gibt es ein paar Sonderzeichen zu Anfang der Ausgabe 
+</I>&gt;<i> die ich nicht zuordnen kann.
+</I>Das klingt ja merkw&#252;rdig.
+&gt;<i> Daher l&#246;sche ich diese w&#228;hrend des Aufrufes mit sed. Bei mir 
+</I>&gt;<i> funktioniert das nun bisher ohne Probleme.
+</I>&gt;<i>
+</I>&gt;<i> Alt:
+</I>&gt;<i> # command=&quot;tiff2ps -h11 -H12 -L.5 -w8.5 -a &quot;+escape(basename+&quot;tif&quot;)+&quot; | 
+</I>&gt;<i> ps2pdf -sPAPERSIZE=a4 - -&quot;
+</I>&gt;<i>
+</I>&gt;<i> Neu:
+</I>&gt;<i> command=&quot;tiff2pdf &quot;+escape(basename+&quot;tif&quot;)+&quot; | sed s/'II*.*%PDF'/%PDF/&quot;
+</I>Das bringt bei mir leider gar nichts. Es kommt zwar so was wie ein PDF
+raus, aber das Ding hat keinen Inhalt. Genau wie bei den PDFs sonst seit
+es hakt. Die PDF-Dateien sind auch viel zu klein. Das schreit danach,
+dass die Konvertierung irgendwo klemmt.
+
+Vorher:
+
+    %PDF-1.4
+    %&#65533;&#50146;
+    5 0 obj
+    &lt;&lt;/Length 6 0 R/Filter /FlateDecode&gt;&gt;
+    stream
+    x&#65533;+T0&#65533;3T0A(&#65533;&#65533;&#65533;&#65533;5Ieendstream
+    endobj
+    6 0 obj
+    23
+    endobj
+    4 0 obj
+    &lt;&lt;/Type/Page/MediaBox [0 0 595 842]
+    /Parent 3 0 R
+    /Resources&lt;&lt;/ProcSet[/PDF]
+    &gt;&gt;
+    /Contents 5 0 R
+    &gt;&gt;
+    endobj
+    3 0 obj
+    &lt;&lt; /Type /Pages /Kids [
+    4 0 R
+    ] /Count 1
+    &gt;&gt;
+    endobj
+    1 0 obj
+    &lt;&lt;/Type /Catalog /Pages 3 0 R
+    /Metadata 7 0 R
+    &gt;&gt;
+    endobj
+    7 0 obj
+    &lt;&lt;/Type/Metadata
+    /Subtype/XML/Length 1344&gt;&gt;stream
+    &lt;?xpacket begin='&#65279;' id='W5M0MpCehiHzreSzNTczkc9d'?&gt;
+    &lt;?adobe-xap-filters esc=&quot;CRLF&quot;?&gt;
+    &lt;x:xmpmeta xmlns:x='adobe:ns:meta/' x:xmptk='XMP toolkit 2.9.1-13, framework 1.6'&gt;
+    &lt;rdf:RDF xmlns:rdf='<A HREF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">http://www.w3.org/1999/02/22-rdf-syntax-ns#</A>' xmlns:iX='<A HREF="http://ns.adobe.com/iX/1.0/">http://ns.adobe.com/iX/1.0/</A>'&gt;
+    &lt;rdf:Description rdf:about='uuid:e55d995c-86e4-11ee-0000-81c0c01e0f8f' xmlns:pdf='<A HREF="http://ns.adobe.com/pdf/1.3/">http://ns.adobe.com/pdf/1.3/</A>' pdf:Producer='GPL Ghostscript 9.05'/&gt;
+    &lt;rdf:Description rdf:about='uuid:e55d995c-86e4-11ee-0000-81c0c01e0f8f' xmlns:xmp='<A HREF="http://ns.adobe.com/xap/1.0/">http://ns.adobe.com/xap/1.0/</A>'&gt;&lt;xmp:ModifyDate&gt;2013-11-16T15:06:54+01:00&lt;/xmp:ModifyDate&gt;
+    &lt;xmp:CreateDate&gt;2013-11-16T15:06:54+01:00&lt;/xmp:CreateDate&gt;
+    &lt;xmp:CreatorTool&gt;UnknownApplication&lt;/xmp:CreatorTool&gt;&lt;/rdf:Description&gt;
+    &lt;rdf:Description rdf:about='uuid:e55d995c-86e4-11ee-0000-81c0c01e0f8f' xmlns:xapMM='<A HREF="http://ns.adobe.com/xap/1.0/mm/">http://ns.adobe.com/xap/1.0/mm/</A>' xapMM:DocumentID='uuid:e55d995c-86e4-11ee-0000-81c0c01e0f8f'/&gt;
+    &lt;rdf:Description rdf:about='uuid:e55d995c-86e4-11ee-0000-81c0c01e0f8f' xmlns:dc='<A HREF="http://purl.org/dc/elements/1.1/">http://purl.org/dc/elements/1.1/</A>' dc:format='application/pdf'&gt;&lt;dc:title&gt;&lt;rdf:Alt&gt;&lt;rdf:li xml:lang='x-default'&gt;Untitled&lt;/rdf:li&gt;&lt;/rdf:Alt&gt;&lt;/dc:title&gt;&lt;/rdf:Description&gt;
+    &lt;/rdf:RDF&gt;
+    &lt;/x:xmpmeta&gt;
+                                                                            
+                                                                            
+    &lt;?xpacket end='w'?&gt;
+    endstream
+    endobj
+    2 0 obj
+    &lt;&lt;/Producer(GPL Ghostscript 9.05)
+    /CreationDate(D:20131116150654+01'00')
+    /ModDate(D:20131116150654+01'00')&gt;&gt;endobj
+    xref
+    0 8
+    0000000000 65535 f 
+    0000000299 00000 n 
+    0000001783 00000 n 
+    0000000240 00000 n 
+    0000000126 00000 n 
+    0000000015 00000 n 
+    0000000108 00000 n 
+    0000000363 00000 n 
+    trailer
+    &lt;&lt; /Size 8 /Root 1 0 R /Info 2 0 R
+    /ID [&lt;B2F56374C6AD46ED2D9D0E31E0E7F708&gt;&lt;B2F56374C6AD46ED2D9D0E31E0E7F708&gt;]
+    &gt;&gt;
+    startxref
+    1906
+    %%EOF
+
+... und nun nach Deiner &#196;nderung:
+
+    %PDF-1.1 
+    %&#65533;&#65533;&#65533;
+    1 0 obj
+    &lt;&lt; 
+    /Type /Catalog 
+    /Pages 3 0 R 
+    &gt;&gt;
+    endobj
+    2 0 obj
+    &lt;&lt; 
+    /CreationDate (D:20131122211339)
+    /ModDate (D:20131122211339)
+    /Producer (libtiff / tiff2pdf - 20120615)
+    /Creator (SffToBmp)
+    /Subject ()
+    &gt;&gt; 
+    endobj
+    3 0 obj
+    &lt;&lt; 
+    /Type /Pages 
+    /Kids [ 4 0 R ] 
+    /Count 1 
+    &gt;&gt; 
+    endobj
+    4 0 obj
+    &lt;&lt;
+    /Type /Page 
+    /Parent 3 0 R 
+    /MediaBox [0.0000 0.0000 612.8867 841.9592] 
+    /Contents 5 0 R 
+    /Resources &lt;&lt; 
+    /XObject &lt;&lt;
+    /Im1 7 0 R &gt;&gt;
+    /ProcSet [ /ImageB ]
+    &gt;&gt;
+    &gt;&gt;
+    endobj
+    5 0 obj
+    &lt;&lt; 
+    /Length 6 0 R 
+     &gt;&gt;
+    stream
+    q  612.8867 0.0000 0.0000 841.9592 0.0000 0.0000 cm /Im1 Do Q
+
+    endstream
+    endobj
+    6 0 obj
+    62
+    endobj
+    7 0 obj
+    &lt;&lt; 
+    /Length 8 0 R 
+    /Type /XObject 
+    /Subtype /Image 
+    /Name /Im1
+    /Width 1728
+    /Height 2292
+    /BitsPerComponent 1
+    /ColorSpace /DeviceGray 
+    /Filter /CCITTFaxDecode /DecodeParms &lt;&lt; /K -1 /Columns 1728 /Rows 2292&gt;&gt;
+     &gt;&gt;
+    stream
+
+Da scheint mir schon kein .tiff mit Inhalt mehr anzukommen.
+
+... bin da gerade etwas ratlos, zumal ich auch kein Python kann ...
+
+1000 Dank!
+
+Stefan.
+
+-- 
+Stefan U. Hegner 
+         &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/capisuite-users">stefan at hegner-online.de</A>&gt;
+              * * *
+D-32584 L&#246;hne --- good ole Germany
+internet: <A HREF="http://www.hegner-web.de">http://www.hegner-web.de</A>
+              * * *
+GPG-Key | D9DB 51BD 2DA6 9B3A 41CB
+F-Print | 0287 05A1 8D11 38BA CE91
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/capisuite-users/attachments/20131122/2c0645a8/attachment.html">https://lists.berlios.de/pipermail/capisuite-users/attachments/20131122/2c0645a8/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/capisuite-users/attachments/20131122/2c0645a8/attachment.pgp">https://lists.berlios.de/pipermail/capisuite-users/attachments/20131122/2c0645a8/attachment.pgp</A>&gt;
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000024.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+	<LI>Next message: <A HREF="000026.html">[Capisuite-users] Faxempfang: PDF Anh&#228;nge  werden nicht mehr korrekt erzeugt (capisuite 0.4.5-12)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#25">[ date ]</a>
+              <a href="thread.html#25">[ thread ]</a>
+              <a href="subject.html#25">[ subject ]</a>
+              <a href="author.html#25">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/capisuite-users">More information about the Capisuite-users
+mailing list</a><br>
+</body></html>
